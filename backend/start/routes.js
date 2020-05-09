@@ -21,6 +21,9 @@ const Route = use('Route')
 
 // Route.get('/test', "AppController.index").middleware(['auth'])
 Route.post('/users', 'UserController.create')
-Route.get('/users/:id', 'UserController.show')
-Route.put('/users/:id', 'UserController.update')
-Route.delete('/users/:id', 'UserController.remove')
+Route.get('/users/:id', 'UserController.show').middleware(['auth'])
+Route.put('/users', 'UserController.update').middleware(['auth'])
+Route.delete('/users', 'UserController.remove').middleware(['auth'])
+
+
+Route.post('/sessions','SessionController.create')
