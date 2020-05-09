@@ -18,12 +18,11 @@ class UserController{
   }
   async update({request, auth, response}){
 
-
     try{
-      const loggedUser = await auth.getUser()
-      const {id}= loggedUser['$attributes']
+
+      const {uid}= auth.jwtPayload
       const {name, email, password, cpf, } = request.post()
-      const user = await User.find(id)
+      const user = await User.find(uid)
 
       user.name = name
       user.email = email
@@ -40,9 +39,8 @@ class UserController{
   }
   async remove({auth, response}){
     try{
-      const logedUser = await auth.getUser()
-      const {id} = logedUser['$attributes']
-      const user = await User.find(id)
+      const {uid}= auth.jwtPayload
+      const user = await User.find(uid)
       await user.delete()
     }catch(err){
       return response.status(400).send({message: "operation not permited"})
