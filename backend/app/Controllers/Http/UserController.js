@@ -1,6 +1,7 @@
 const User = use('App/Models/User');
 
 class UserController{
+
   async create({request}){
     const {name, email, password, cpf } = request.post()
     const user = await User.create({
@@ -8,14 +9,19 @@ class UserController{
     });
     return user;
   }
+
   async show({request, response}){
     const {id} = request.params
     const user = await User.find(id)
     if(!user)
       return response.status(404).send({message:"User not found"})
-    user.password= undefined
     return user
   }
+
+  async showAll(){
+    return await User.all();
+  }
+
   async update({request, auth, response}){
 
     try{
@@ -37,10 +43,13 @@ class UserController{
     }
 
   }
+
   async remove({auth, response}){
     try{
       const {uid}= auth.jwtPayload
       const user = await User.find(uid)
+      if(!user)
+        return response.status(404).send({message:"User not found"})
       await user.delete()
     }catch(err){
       return response.status(400).send({message: "operation not permited"})
