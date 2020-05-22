@@ -12,6 +12,11 @@ class UserController {
         cpf,
       });
 
+      await Mail.send('emails.welcome', {}, (message) => {
+        message.from('rennanprysthon@gmail.com');
+        message.to(user.email);
+      });
+
       return user;
     } catch (error) {
       console.log(error);
@@ -60,6 +65,15 @@ class UserController {
     }
 
     return;
+  }
+
+  async forgotPassword({ request, auth, response }) {
+    try {
+      const { email } = request.params;
+
+      const user = await User.findBy('email', email);
+      console.log(user);
+    } catch (error) {}
   }
 }
 

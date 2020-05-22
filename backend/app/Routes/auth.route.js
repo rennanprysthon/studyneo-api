@@ -3,5 +3,6 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route');
 
-require('./auth.route');
-require('./users.route');
+Route.post('/login', 'SessionController.authenticate');
+
+module.exports = Route;
