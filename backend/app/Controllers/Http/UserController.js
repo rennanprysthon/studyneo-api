@@ -1,62 +1,66 @@
 const User = use('App/Models/User');
+const Mail = use('Mail');
 
-class UserController{
+class UserController {
+  async store({ request }) {
+    const { name, email, password, cpf } = request.post();
+    try {
+      const user = await User.create({
+        name,
+        email,
+        password,
+        cpf,
+      });
 
-  async create({request}){
-    const {name, email, password, cpf } = request.post()
-    const user = await User.create({
-      name, email, password, cpf
-    });
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async show({ request, response }) {
+    const { id } = request.params;
+    const user = await User.find(id);
+    if (!user) return response.status(404).send({ message: 'User not found' });
     return user;
   }
 
-  async show({request, response}){
-    const {id} = request.params
-    const user = await User.find(id)
-    if(!user)
-      return response.status(404).send({message:"User not found"})
-    return user
-  }
-
-  async showAll(){
+  async showAll() {
     return await User.all();
   }
 
-  async update({request, auth, response}){
+  async update({ request, auth, response }) {
+    try {
+      const { uid } = auth.jwtPayload;
+      const { name, email, password, cpf } = request.post();
+      const user = await User.find(uid);
 
-    try{
+      user.name = name;
+      user.email = email;
+      user.password = password;
+      user.cpf = cpf;
 
-      const {uid}= auth.jwtPayload
-      const {name, email, password, cpf, } = request.post()
-      const user = await User.find(uid)
+      await user.save();
 
-      user.name = name
-      user.email = email
-      user.password = password
-      user.cpf = cpf
-
-      await user.save()
-
-      return {name, email, password, cpf}
-    }catch(err){
-      return response.status(400).send({message: "operation not permited"})
+      return { name, email, password, cpf };
+    } catch (err) {
+      return response.status(400).send({ message: 'operation not permited' });
     }
-
   }
 
-  async remove({auth, response}){
-    try{
-      const {uid}= auth.jwtPayload
-      const user = await User.find(uid)
-      if(!user)
-        return response.status(404).send({message:"User not found"})
-      await user.delete()
-    }catch(err){
-      return response.status(400).send({message: "operation not permited"})
+  async remove({ auth, response }) {
+    try {
+      const { uid } = auth.jwtPayload;
+      const user = await User.find(uid);
+      if (!user)
+        return response.status(404).send({ message: 'User not found' });
+      await user.delete();
+    } catch (err) {
+      return response.status(400).send({ message: 'operation not permited' });
     }
 
-    return
+    return;
   }
 }
 
-module.exports = UserController
+module.exports = UserController;
