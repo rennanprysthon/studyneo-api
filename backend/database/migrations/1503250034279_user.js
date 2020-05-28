@@ -11,6 +11,7 @@ class UserSchema extends Schema {
       table.string('password', 60).notNullable()
       table.string('name', 50).notNullable()
       table.string('cpf', 11).notNullable().unique()
+      table.boolean('is_activated').defaultTo(false)
       table.timestamps()
     })
   }

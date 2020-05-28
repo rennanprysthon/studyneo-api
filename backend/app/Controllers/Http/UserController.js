@@ -1,8 +1,9 @@
 const User = use('App/Models/User');
 const Mail = use('Mail');
+const Env = use('Env')
 
 class UserController {
-  async store({ request }) {
+  async store({ request, auth}) {
     const { name, email, password, cpf } = request.post();
     try {
       const user = await User.create({
@@ -10,16 +11,22 @@ class UserController {
         email,
         password,
         cpf,
+        is_activated: false,
       });
 
-      const resp = await Mail.send('emails.welcome', {}, (message) => {
+      const { token } = await auth.generate(user)
+
+      const urlConfirmacao = `${Env.get('APP_URL')}/auth/confirm/${token}`;
+
+      await Mail.send('emails.welcome', {
+        name,
+        urlConfirmacao
+      }, (message) => {
         message
           .from('Teste <postmaster@sandboxa5218ba10a414287bb43e8064c4bb3d4.mailgun.org>')
           .to(user.email)
-          .subject('Welcome to StudyNeo')
+          .subject('Confirmar email')
       });
-
-      console.log(resp)
 
       return user;
     } catch (error) {
