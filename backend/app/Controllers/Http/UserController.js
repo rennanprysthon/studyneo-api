@@ -12,10 +12,14 @@ class UserController {
         cpf,
       });
 
-      await Mail.send('emails.welcome', {}, (message) => {
-        message.from('rennanprysthon@gmail.com');
-        message.to(user.email);
+      const resp = await Mail.send('emails.welcome', {}, (message) => {
+        message
+          .from('Teste <postmaster@sandboxa5218ba10a414287bb43e8064c4bb3d4.mailgun.org>')
+          .to(user.email)
+          .subject('Welcome to StudyNeo')
       });
+
+      console.log(resp)
 
       return user;
     } catch (error) {
@@ -65,15 +69,6 @@ class UserController {
     }
 
     return;
-  }
-
-  async forgotPassword({ request, auth, response }) {
-    try {
-      const { email } = request.params;
-
-      const user = await User.findBy('email', email);
-      console.log(user);
-    } catch (error) {}
   }
 }
 
