@@ -3,7 +3,7 @@ const Mail = use('Mail');
 const Env = use('Env')
 
 class UserController {
-  async store({ request, auth}) {
+  async store({ request, response, auth}) {
     const { name, email, password, cpf } = request.post();
     try {
       const user = await User.create({
@@ -28,7 +28,7 @@ class UserController {
           .subject('Confirmar email')
       });
 
-      return user;
+      response.status(204);
     } catch (error) {
       console.log(error);
     }
