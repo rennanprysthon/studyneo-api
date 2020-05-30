@@ -37,6 +37,10 @@ class User extends Model {
   tokens() {
     return this.hasMany('App/Models/Token');
   }
+
+  endereco() {
+    return this.hasOne('App/Models/Endereco')
+  }
 }
 
 module.exports = User;

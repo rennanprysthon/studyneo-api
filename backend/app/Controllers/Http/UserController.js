@@ -1,21 +1,32 @@
-const User = use('App/Models/User');
 const Mail = use('Mail');
 const Env = use('Env')
 
+const User = use('App/Models/User');
+const Endereco = use('App/Models/Endereco')
+
 class UserController {
   async store({ request, response, auth}) {
-    const { name, email, password, cpf } = request.post();
+    const { name, email, password, cpf, endereco, data_nascimento } = request.post();
     try {
       const user = await User.create({
         name,
         email,
         password,
         cpf,
+        data_nascimento,
         is_activated: false,
       });
 
-      const { token } = await auth.generate(user)
+      user.reload();
 
+      await user.endereco().create({
+        user_id:user.id,
+        ...endereco
+      });
+
+      const { token } = await auth.generate(user);
+
+      /*
       const urlConfirmacao = `${Env.get('APP_URL')}/auth/confirm/${token}`;
 
       await Mail.send('emails.welcome', {
@@ -27,8 +38,10 @@ class UserController {
           .to(user.email)
           .subject('Confirmar email')
       });
+      */
 
-      response.status(204);
+      return user;
+
     } catch (error) {
       console.log(error);
     }
@@ -36,7 +49,12 @@ class UserController {
 
   async show({ request, response }) {
     const { id } = request.params;
-    const user = await User.find(id);
+    const user = await User
+      .query()
+      .where('id', id)
+      .with('endereco')
+      .fetch();
+
     if (!user) return response.status(404).send({ message: 'User not found' });
     return user;
   }
