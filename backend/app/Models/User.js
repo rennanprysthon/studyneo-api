@@ -39,7 +39,10 @@ class User extends Model {
   }
 
   endereco() {
-    return this.hasOne('App/Models/Endereco')
+    return this.hasOne('App/Models/Endereco');
+  }
+  profile() {
+    return this.hasOne('App/Models/Profile');
   }
 }
 
