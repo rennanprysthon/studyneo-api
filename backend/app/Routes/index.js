@@ -5,3 +5,4 @@ const Route = use('Route');
 
 require('./auth.route');
 require('./users.route');
+require('./profile.route');

@@ -13,7 +13,9 @@ class ProfileSchema extends Schema {
         .references('id')
         .inTable('users')
         .onDelete('CASCADE')
-        .onUpdate('CASCADE');
+        .onUpdate('CASCADE')
+        .unique();
+
       table.enu('escolaridade', [
         'Ensino Fundamental Incompleto',
         'Ensino Fundamental Completo',
