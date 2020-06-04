@@ -22,7 +22,7 @@ class ProfileSchema extends Schema {
         'Ensino Superior Incompleto',
         'Ensino Superior Completo',
       ]);
-      table.enu('rede', ['Pública', 'Privada']);
+      table.boolean('is_from_public').notNullable();
       table.enu('area', ['Humanas', 'Linguagens', 'Exatas', 'Saúde']);
       table.timestamps();
     });
