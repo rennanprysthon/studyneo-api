@@ -1,8 +1,8 @@
 const Route = use('Route');
 
-Route.post('/profiles/:user_id', 'ProfileController.create');
-Route.put('/profiles/:user_id', 'ProfileController.update');
-Route.get('/profiles/:user_id', 'ProfileController.show');
-Route.delete('/profiles/:user_id', 'ProfileController.destroy');
+Route.post('/profiles', 'ProfileController.create').middleware('auth');
+Route.put('/profiles', 'ProfileController.update').middleware('auth');
+Route.get('/profiles', 'ProfileController.show').middleware('auth');
+Route.delete('/profiles', 'ProfileController.destroy').middleware('auth');
 
 module.exports = Route;
