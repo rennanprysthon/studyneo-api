@@ -2,11 +2,9 @@ const Mail = use('Mail');
 const Env = use('Env')
 
 const User = use('App/Models/User');
-const Endereco = use('App/Models/Endereco')
-
 class UserController {
-  async store({ request, response, auth}) {
-    const { name, email, password, cpf, endereco, data_nascimento } = request.post();
+  async store({ request, auth}) {
+    const { name, email, password, cpf, data_nascimento } = request.post();
     try {
       const user = await User.create({
         name,
@@ -17,30 +15,16 @@ class UserController {
         is_activated: false,
       });
 
-      user.reload();
-
-      await user.endereco().create({
-        user_id:user.id,
-        ...endereco
-      });
-
       const { token } = await auth.generate(user);
 
-      const urlConfirmacao = `${Env.get('APP_URL')}/auth/confirm/${token}`
-
       try {
-        await Mail.send('emails.welcome', {
-          name,
-          urlConfirmacao
-        }, (message) => {
+        await Mail.send('emails.welcome', { name, urlConfirmacao: `${Env.get('APP_URL')}/auth/confirm/${token}`}, (message) => {
           message
             .from('Studyneo <postmaster@sandboxa5218ba10a414287bb43e8064c4bb3d4.mailgun.org>')
             .to(user.email)
             .subject('Confirmar email')
         });
-      } catch (error) {
-        console.log(`Erro ao enviar o email: ${error}`);
-      }
+      } catch (error) { console.log(`Erro ao enviar o email: ${error}`); }
 
       return user;
     } catch (error) {
