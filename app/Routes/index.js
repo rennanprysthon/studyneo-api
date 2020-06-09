@@ -16,3 +16,5 @@ Route.get('/', () => {
 });
 
 module.exports = Route;
+
+require('./admin.route');
