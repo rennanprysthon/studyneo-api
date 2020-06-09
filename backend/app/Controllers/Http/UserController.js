@@ -26,22 +26,23 @@ class UserController {
 
       const { token } = await auth.generate(user);
 
-      /*
-      const urlConfirmacao = `${Env.get('APP_URL')}/auth/confirm/${token}`;
+      const urlConfirmacao = `${Env.get('APP_URL')}/auth/confirm/${token}`
 
-      await Mail.send('emails.welcome', {
-        name,
-        urlConfirmacao
-      }, (message) => {
-        message
-          .from('Teste <postmaster@sandboxa5218ba10a414287bb43e8064c4bb3d4.mailgun.org>')
-          .to(user.email)
-          .subject('Confirmar email')
-      });
-      */
+      try {
+        await Mail.send('emails.welcome', {
+          name,
+          urlConfirmacao
+        }, (message) => {
+          message
+            .from('Studyneo <postmaster@sandboxa5218ba10a414287bb43e8064c4bb3d4.mailgun.org>')
+            .to(user.email)
+            .subject('Confirmar email')
+        });
+      } catch (error) {
+        console.log(`Erro ao enviar o email: ${error}`);
+      }
 
       return user;
-
     } catch (error) {
       console.log(error);
     }
