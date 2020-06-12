@@ -1,5 +1,6 @@
 const Mail = use('Mail');
 const Env = use('Env');
+
 const User = use('App/Models/User');
 const Redis = use('Redis');
 const bcrypt = use('bcrypt');
@@ -25,17 +26,19 @@ class UserController {
           'emails.welcome',
           {
             name,
-            key,
+            urlConfirmacao: `${Env.get('APP_URL')}/auth/confirm/${token}`,
           },
           (message) => {
             message
-              .from('no-reply<noreply@studyneo.com.br>')
+              .from(
+                'Studyneo <postmaster@sandboxa5218ba10a414287bb43e8064c4bb3d4.mailgun.org>'
+              )
               .to(user.email)
               .subject('Confirmar email');
           }
         );
       } catch (error) {
-        console.log(error);
+        console.log(`Erro ao enviar o email: ${error}`);
       }
 
       return user;
@@ -52,8 +55,12 @@ class UserController {
     return user;
   }
 
-  async showAll() {
-    return await User.all();
+  async showAll({ request }) {
+    const page = 1;
+
+    const users = await User.query().paginate(page);
+
+    return users;
   }
 
   async update({ request, auth, response }) {
