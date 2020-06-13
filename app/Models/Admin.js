@@ -4,6 +4,9 @@
 const Model = use('Model');
 const Hash = use('Hash');
 class Admin extends Model {
+  static get hidden() {
+    return ['password'];
+  }
   static boot() {
     super.boot();
 

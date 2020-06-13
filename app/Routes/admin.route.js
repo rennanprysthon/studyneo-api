@@ -1,8 +1,6 @@
 const Route = use('Route');
 
-Route.post('/admin', 'AdminController.create')
-  .validator('StoreAdmin')
-  .middleware('admin');
+Route.post('/admin', 'AdminController.create').validator('StoreAdmin');
 Route.post('/admin/login', 'AdminController.auth');
 Route.get('/admin', 'AdminController.index').middleware('admin');
 Route.get('/admin/:id', 'AdminController.show').middleware('admin');
