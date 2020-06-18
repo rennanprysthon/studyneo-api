@@ -1,118 +1,162 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-  <html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&family=Ubuntu:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <title>Confirmar email</title>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
       * {
         margin: 0;
         padding: 0;
-        font-size: 100%;
-        font-family: 'Rubik', sans-serif;
+        box-sizing: border-box;
       }
-      table {
-        border-spacing: 0;
-      }
-
-      @media screen and (max-width: 600px) {
-      }
-
-      @media screen and (max-width: 400px) {
-      }
-
       body {
-        background-color: #e6e5e8;
-      }
-      .wrapper {
+        background: #ececec;
         width: 100%;
-        table-layout: fixed;
-        background-color: #f6f9fc;
-        padding-bottom: 40px;
+        height: 800px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: "Rubik", sans-serif;
+        color: #303030;
+        font-size: 17px;
       }
-      .webkit {
-        max-width: 600px;
-        background-color: #ffffff;
-
+      .content {
+        width: 90%;
+        max-width: 500px;
+        padding: 20px;
+        height: 90%;
+        background: #fff;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        position: relative;
+        -webkit-box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, 0.75);
+        box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, 0.75);
       }
-      .outer {
-        Margin: 0 auto;
+      .text-welcome {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        font-size: 20px;
+        color: #303030;
+        border: 2px dashed #ececec;
+        border-radius: 8px;
+      }
+      .text-welcome p {
+        text-align: center;
+      }
+      #title {
+        font-weight: bold;
+        font-family: "Ubuntu", sans-serif;
+        color: rgb(248, 203, 0);
+      }
+      span {
+        color: rgb(17, 193, 216);
+      }
+      .code-box {
+        background-color: #ececec;
+        color: #3d3d3d;
+        font-weight: bold;
+        font-family: "Ubuntu", sans-serif;
+        font-size: 2rem;
         width: 100%;
-        max-width: 600px;
-        border-spacing: 0;
-        color: #4a4a4a;
+        padding: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        margin-bottom: 50px;
+      }
+      footer {
+        bottom: 0;
+        background: #3d3d3d;
+        width: 100%;
+        position: absolute;
+        padding: 10px;
+        border-bottom-right-radius: 8px;
+        border-bottom-left-radius: 8px;
+        color: #fff;
+      }
+      header {
+        background: rgb(17, 193, 216);
+        position: absolute;
+        top: 0;
+        color: #fff;
+        width: 100%;
+        padding: 15px;
+        border-top-right-radius: 8px;
+        border-top-left-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      strong {
+        font-size: 20px;
+        font-family: "Ubuntu", sans-serif;
+      }
+      h1 {
+        margin-top: 70px;
+        color: #3d3d3d;
+      }
+      section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-top: 30px;
+      }
+      section p {
+        margin-bottom: 8px;
       }
     </style>
   </head>
 
-
   <body>
-    <center class="wrapper">
-      <div class="webkit">
-        <table class="outer" align="center">
-          <tr>
-            <td>
-              <table width="100%" style="border-spacing: 0;">
-                <tr>
-                  <td style="background-color: #388cda; color: #f0f0f0; padding: 15px; text-align: center; font-size: 22px;">
-                    <img src="logotipo_azul_branco.png" alt="" width="80%">
-                    <h2 style="font-size: 22px; font-weight: bold; margin-bottom: 20px; padding: 15px">
-                      Rennan Pryshon, sua inscrição na plataforma StudyNeo foi concluida com sucesso!
-                    </h2>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <tr>
-            <td>
-              <table width="100%" style="border-spacing: 0;">
-                <tr>
-                  <td style="padding: 15px; text-align: center; margin: auto; width: 25%;">
-                    <p style="margin-bottom: 5px;">
-                      Aqui está o seu código de ativação
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td style="text-align: center;">
-              <table width="100%" style="border-spacing: 0; padding: 10px;">
-                <tr>
-                  <td>
-                    <div style="padding: 20px; border-radius: 10px; background-color: #f6f9fc; font-size: 26px; font-weight: b;">
-                      95K3
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <tr>
-            <td>
-              <table width="100%" style="border-spacing: 0; padding: 10px;">
-                <tr>
-                  <td>
-                    <div style="background-color: #4a4a4a; padding: 10px 5px;">
-                      <span style="font-size: 12px; color: #ffffff;">
-                        &copy; Copyright Studyneo 2020
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-        </table>
-
+    <div class="content">
+      <header>
+        <img
+          src="https://i.imgur.com/IJGz4g0.png"
+          alt="study-neo"
+          height="50"
+        />
+      </header>
+      <h1>Seja Bem-Vindo(a)!</h1>
+      <div class="text-welcome">
+        <span class="material-icons">
+          verified
+        </span>
+        <p>
+          {{name}}, sua inscrição na plataforma
+          <span id="title">Study<span>Neo</span></span>
+          foi concluída com sucesso!
+        </p>
       </div>
-    </center>
+      <section>
+        <p>Código de ativação:</p>
+        <div class="code-box">
+          {{key}}
+        </div>
+      </section>
+
+      <footer>
+        © Copyright StudyNeo 2020
+      </footer>
+    </div>
   </body>
 </html>
