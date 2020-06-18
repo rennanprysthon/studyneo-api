@@ -1,5 +1,4 @@
 'use strict';
-
 /*
 |--------------------------------------------------------------------------
 | Providers
@@ -19,6 +18,7 @@ const providers = [
   '@adonisjs/mail/providers/MailProvider',
   '@adonisjs/framework/providers/ViewProvider',
   '@adonisjs/validator/providers/ValidatorProvider',
+  '@adonisjs/redis/providers/RedisProvider',
 ];
 
 /*
