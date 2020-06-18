@@ -83,6 +83,23 @@ class UserController {
 
     return;
   }
+  async confirm({ request, auth, response }) {
+    const { email, code } = request.post();
+    const token = await Redis.get(code);
+    const matchingEmails = await bcrypt.compareSync(email, token);
+    if (!matchingEmails) {
+      return response.status(400).json({ message: 'Unable to verify Email' });
+    }
+    const user = await User.findBy({ email });
+    user.is_activated = true;
+    await user.save();
+    try {
+      const sessionToken = await auth.newRefreshToken().generate(user);
+      return sessionToken;
+    } catch (err) {
+      return response.status(400).json({ message: 'Unable to generate Token' });
+    }
+  }
 }
 
 module.exports = UserController;
