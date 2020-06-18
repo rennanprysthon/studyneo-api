@@ -1,9 +1,11 @@
 const Mail = use('Mail');
 const Env = use('Env');
-
 const User = use('App/Models/User');
+const Redis = use('Redis');
+const bcrypt = use('bcrypt');
+const crypto = use('crypto');
 class UserController {
-  async store({ request, auth }) {
+  async store({ request }) {
     const { name, email, password } = request.post();
     try {
       const user = await User.create({
@@ -13,9 +15,25 @@ class UserController {
         is_activated: false,
       });
 
-      const { token } = await auth.generate(user);
+      const confirmEmailToken = await bcrypt.hashSync(email, 10);
+      const key = crypto.randomBytes(3).toString('HEX').toUpperCase();
+      await Redis.set(key, confirmEmailToken);
 
+      //const { token } = await auth.generate(user);
       try {
+        await Mail.send(
+          'emails.welcome',
+          {
+            name,
+            key,
+          },
+          (message) => {
+            message
+              .from('no-reply<noreply@studyneo.com.br>')
+              .to(user.email)
+              .subject('Confirmar email');
+          }
+        );
       } catch (error) {
         console.log(error);
       }
@@ -41,17 +59,12 @@ class UserController {
   async update({ request, auth, response }) {
     try {
       const { uid } = auth.jwtPayload;
-      const { name, email, password, cpf } = request.post();
+      const data = request.post();
       const user = await User.find(uid);
-
-      user.name = name;
-      user.email = email;
-      user.password = password;
-      user.cpf = cpf;
-
+      user.merge(data);
       await user.save();
 
-      return { name, email, password, cpf };
+      return user;
     } catch (err) {
       return response.status(400).send({ message: 'operation not permited' });
     }
