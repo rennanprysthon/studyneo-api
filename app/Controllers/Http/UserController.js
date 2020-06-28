@@ -35,7 +35,7 @@ class UserController {
           }
         );
       } catch (error) {
-        console.log(error);
+        console.log(`Erro ao enviar o email: ${error}`);
       }
 
       return user;
@@ -52,8 +52,12 @@ class UserController {
     return user;
   }
 
-  async showAll() {
-    return await User.all();
+  async showAll({ request }) {
+    const page = 1;
+
+    const users = await User.query().paginate(page);
+
+    return users;
   }
 
   async update({ request, auth, response }) {

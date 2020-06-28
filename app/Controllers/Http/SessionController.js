@@ -14,19 +14,25 @@ class SessionController {
     try {
       const { email } = request.post();
       const user = await User.findBy('email', email);
-      const token = await auth.generate(user)
+      const token = await auth.generate(user);
 
       const url = `${Env.get('FRONT_URL')}/resetpass/token=${token}`;
 
-      await Mail.send('emails.forgotpassword', {
-        name,
-        url
-      }, (message) => {
-        message
-          .from('Teste <postmaster@sandboxa5218ba10a414287bb43e8064c4bb3d4.mailgun.org>')
-          .to(user.email)
-          .subject('Recuperar senha')
-      });
+      await Mail.send(
+        'emails.forgotpassword',
+        {
+          name,
+          url,
+        },
+        (message) => {
+          message
+            .from(
+              'Teste <postmaster@sandboxa5218ba10a414287bb43e8064c4bb3d4.mailgun.org>'
+            )
+            .to(user.email)
+            .subject('Recuperar senha');
+        }
+      );
 
       response.send(204);
     } catch (error) {
@@ -36,21 +42,19 @@ class SessionController {
 
   async confirmEmail({ params, auth, response }) {
     try {
-      const token = await auth.authenticator('jwt')._verifyToken(params.token)
+      const token = await auth.authenticator('jwt')._verifyToken(params.token);
 
-      const user = await User.findBy('id', token.uid)
+      const user = await User.findBy('id', token.uid);
 
       user.is_activated = true;
 
-      await user.save()
+      await user.save();
 
-      await auth
-        .authenticator('jwt')
-        .revokeTokens([token], true)
+      await auth.authenticator('jwt').revokeTokens([token], true);
 
-      response.status(204).redirect(Env.get('FRONT_URL'))
+      response.status(204).redirect(Env.get('FRONT_URL'));
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 }
