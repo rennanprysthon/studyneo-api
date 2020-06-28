@@ -15,12 +15,12 @@ class SubjectController {
 
   async show({ request, response }) {
     const { id } = request.params;
-    const subject = Subject.find(Number(id));
+    const subject = Subject.query().where('matter_id', Number(id)).fetch();
     if (!subject)
       return response
         .status(400)
         .json({ message: 'Could not find such subject' });
-    return subject.lessons().fetch();
+    return subject;
   }
 
   async update({ request }) {
