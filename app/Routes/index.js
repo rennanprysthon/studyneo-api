@@ -4,6 +4,8 @@ require('./auth.route');
 require('./users.route');
 require('./profile.route');
 require('./subject.route');
+require('./admin.route');
+require('./area.route');
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route');
