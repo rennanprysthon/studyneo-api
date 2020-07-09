@@ -11,6 +11,10 @@ class Subject extends Model {
   lessons() {
     return this.hasMany('App/Models/Lesson');
   }
+
+  questions() {
+    return this.hasMany('App/Models/Question');
+  }
 }
 
 module.exports = Subject;
