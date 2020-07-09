@@ -4,8 +4,11 @@
 const Model = use('Model');
 
 class Question extends Model {
-  matter() {
+  subject() {
     return this.belongsTo('App/Models/Subject');
+  }
+  alternatives() {
+    return this.hasMany('App/Models/Alternative');
   }
 }
 

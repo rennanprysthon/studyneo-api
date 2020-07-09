@@ -1,55 +1,48 @@
 'use strict';
 const Question = use('App/Models/Question');
+const Database = use('Database');
+const Alternative = use('App/Models/Alternative');
 class QuestionController {
   async create({ request }) {
-    const {
-      subject_id,
-      enunciado,
-      alternativaA,
-      alternativaB,
-      alternativaC,
-      alternativaE,
-      correta,
-    } = request.params;
-
-    const subject = await Question.create({
-      subject_id,
-      enunciado,
-      alternativaA,
-      alternativaB,
-      alternativaC,
-      alternativaE,
-      correta,
-    });
-
-    return subject;
+    const { enunciado, subject_id, alternatives } = request.post();
+    const { id } = await Question.create({ enunciado, subject_id });
+    alternatives.forEach((alternativa) => (alternativa.question_id = id));
+    await Alternative.createMany(alternatives);
+    const question_alternatives = await Question.query()
+      .with('alternatives')
+      .where({ id })
+      .fetch();
+    return question_alternatives;
   }
 
-  async index() {
-    const questions = await Question.all();
+  async index({ request }) {
+    const { page = 1 } = request.get();
+    const questions = await Database.from('questions').paginate(page, 10);
+    questions.total = Number(questions.total);
     return questions;
   }
 
   async show({ request, response }) {
     const { id } = request.params;
-    const subject = Question.query().where('subject_id', Number(id)).fetch();
-    if (!subject)
+    const question = await Question.find(Number(id));
+    if (!question)
       return response
         .status(400)
         .json({ message: 'Could not find such question' });
-    return subject;
-  }
-
-  async update({ request }) {
-    const { id } = request.params;
-    const data = request.post();
-
-    const question = await Question.find(Number(id));
-    question.merge(data);
-    await question.save();
-
+    await question.load('alternatives');
     return question;
   }
+
+  // async update({ request }) {
+  //   const { id } = request.params;
+  //   const data = request.post();
+
+  //   const question = await Question.find(Number(id));
+  //   question.merge(data);
+  //   await question.save();
+
+  //   return question;
+  // }
 
   async destroy({ request }) {
     const { id } = request.params;
