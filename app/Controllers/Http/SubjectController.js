@@ -8,8 +8,11 @@ class SubjectController {
     return subject;
   }
 
-  async index() {
-    const subjects = await Subject.all();
+  async index({ request }) {
+    const { matter_id } = request.get();
+    const subjects = await Subject.query()
+      .where({ matter_id: Number(matter_id) })
+      .fetch();
     return subjects;
   }
 
