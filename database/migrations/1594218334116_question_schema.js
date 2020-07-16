@@ -15,6 +15,7 @@ class QuestionSchema extends Schema {
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
       table.string('enunciado');
+      table.string('texto_apoio');
       table.timestamps();
     });
   }

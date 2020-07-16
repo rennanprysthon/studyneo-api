@@ -4,8 +4,8 @@ const Database = use('Database');
 const Alternative = use('App/Models/Alternative');
 class QuestionController {
   async create({ request }) {
-    const { enunciado, subject_id, alternatives } = request.post();
-    const { id } = await Question.create({ enunciado, subject_id });
+    const { enunciado, texto_apoio, subject_id, alternatives } = request.post();
+    const { id } = await Question.create({ texto_apoio, enunciado, subject_id });
     alternatives.forEach((alternativa) => (alternativa.question_id = id));
     await Alternative.createMany(alternatives);
     const question_alternatives = await Question.query()
