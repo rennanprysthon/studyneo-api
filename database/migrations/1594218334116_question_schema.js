@@ -16,6 +16,7 @@ class QuestionSchema extends Schema {
         .onUpdate('CASCADE');
       table.text('enunciado');
       table.text('question');
+      table.string('key');
       table.timestamps();
     });
   }

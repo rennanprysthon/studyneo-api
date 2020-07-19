@@ -1,8 +1,8 @@
 'use strict';
 const Question = use('App/Models/Question');
 const Database = use('Database');
-const Alternative = use('App/Models/Alternative');
-const Text = use('App/Models/Text');
+const crypto = use('crypto');
+
 class QuestionController {
   async create({ request }) {
     const {
@@ -12,10 +12,13 @@ class QuestionController {
       texts = [],
       alternatives,
     } = request.post();
+    const key = crypto.randomBytes(3).toString('HEX').toUpperCase();
+
     const createdQuestion = await Question.create({
       question,
       enunciado,
       subject_id,
+      key,
     });
 
     const createdAlternatives = await createdQuestion
@@ -45,10 +48,19 @@ class QuestionController {
       return response
         .status(400)
         .json({ message: 'Could not find such question' });
-    await question.load('alternatives');
+    await question.loadMany(['alternatives', 'texts']);
     return question;
   }
+  async listBySubject({ request }) {
+    const { subject_id } = request.params;
+    const { page = 1 } = request.get();
 
+    const questions = await await Database.from('questions')
+      .where({ subject_id })
+      .paginate(page, 10);
+    questions.total = Number(questions.total);
+    return questions;
+  }
   // async update({ request }) {
   //   const { id } = request.params;
   //   const data = request.post();
