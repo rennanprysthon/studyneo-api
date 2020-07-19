@@ -26,10 +26,10 @@ class Admin {
 
       response.header('token', refreshed_token.token);
       response.header('refresh_token', refreshed_token.refreshToken);
-      await next();
     } catch (err) {
       return response.status(400).json({ message: 'Unauthorized' });
     }
+    await next();
   }
 }
 

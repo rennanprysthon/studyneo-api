@@ -2,17 +2,33 @@
 const Question = use('App/Models/Question');
 const Database = use('Database');
 const Alternative = use('App/Models/Alternative');
+const Text = use('App/Models/Text');
 class QuestionController {
   async create({ request }) {
-    const { enunciado, texto_apoio, subject_id, alternatives } = request.post();
-    const { id } = await Question.create({ texto_apoio, enunciado, subject_id });
-    alternatives.forEach((alternativa) => (alternativa.question_id = id));
-    await Alternative.createMany(alternatives);
-    const question_alternatives = await Question.query()
-      .with('alternatives')
-      .where({ id })
-      .fetch();
-    return question_alternatives;
+    const {
+      enunciado,
+      question,
+      subject_id,
+      texts = [],
+      alternatives,
+    } = request.post();
+    const createdQuestion = await Question.create({
+      question,
+      enunciado,
+      subject_id,
+    });
+
+    const createdAlternatives = await createdQuestion
+      .alternatives()
+      .createMany(alternatives);
+    createdQuestion.alternatives = createdAlternatives;
+
+    if (texts.length > 0) {
+      const createdTexts = await createdQuestion.texts().createMany(texts);
+      createdQuestion.texts = createdTexts;
+    }
+
+    return createdQuestion;
   }
 
   async index({ request }) {

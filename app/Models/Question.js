@@ -10,6 +10,9 @@ class Question extends Model {
   alternatives() {
     return this.hasMany('App/Models/Alternative');
   }
+  texts() {
+    return this.hasMany('App/Models/Text');
+  }
 }
 
 module.exports = Question;

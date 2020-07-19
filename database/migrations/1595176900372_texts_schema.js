@@ -3,26 +3,26 @@
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema');
 
-class QuestionSchema extends Schema {
+class TextsSchema extends Schema {
   up() {
-    this.create('questions', (table) => {
+    this.create('texts', (table) => {
       table.increments();
+      table.text('content');
+      table.string('title');
       table
-        .integer('subject_id')
+        .integer('question_id')
         .unsigned()
         .references('id')
-        .inTable('subjects')
+        .inTable('questions')
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
-      table.text('enunciado');
-      table.text('question');
       table.timestamps();
     });
   }
 
   down() {
-    this.drop('questions');
+    this.drop('texts');
   }
 }
 
-module.exports = QuestionSchema;
+module.exports = TextsSchema;
