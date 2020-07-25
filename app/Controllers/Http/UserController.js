@@ -13,33 +13,34 @@ class UserController {
         name,
         email,
         password,
-        is_activated: false,
+        is_activated: true,
       });
 
-      const confirmEmailToken = await bcrypt.hashSync(email, 10);
-      const key = crypto.randomBytes(3).toString('HEX').toUpperCase();
-      await Redis.set(key, confirmEmailToken);
+      //CONFIRM EMAIL (JUST REMOVE THE COMMENTS)
+      // const confirmEmailToken = await bcrypt.hashSync(email, 10);
+      // const key = crypto.randomBytes(3).toString('HEX').toUpperCase();
+      // await Redis.set(key, confirmEmailToken);
 
-      //const { token } = await auth.generate(user);
-      try {
-        await Mail.send(
-          'emails.welcome',
-          {
-            name,
-            urlConfirmacao: `${Env.get('APP_URL')}/auth/confirm/${token}`,
-          },
-          (message) => {
-            message
-              .from(
-                'Studyneo <postmaster@sandboxa5218ba10a414287bb43e8064c4bb3d4.mailgun.org>'
-              )
-              .to(user.email)
-              .subject('Confirmar email');
-          }
-        );
-      } catch (error) {
-        console.log(`Erro ao enviar o email: ${error}`);
-      }
+      // //const { token } = await auth.generate(user);
+      // try {
+      //   await Mail.send(
+      //     'emails.welcome',
+      //     {
+      //       name,
+      //       urlConfirmacao: `${Env.get('APP_URL')}/auth/confirm/${token}`,
+      //     },
+      //     (message) => {
+      //       message
+      //         .from(
+      //           'Studyneo <postmaster@sandboxa5218ba10a414287bb43e8064c4bb3d4.mailgun.org>'
+      //         )
+      //         .to(user.email)
+      //         .subject('Confirmar email');
+      //     }
+      //   );
+      // } catch (error) {
+      //   console.log(`Erro ao enviar o email: ${error}`);
+      // }
 
       return user;
     } catch (error) {
