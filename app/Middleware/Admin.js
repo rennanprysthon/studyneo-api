@@ -13,7 +13,7 @@ class Admin {
     try {
       await auth.authenticator('admin').check();
       const refresh_token = request.header('refresh_token');
-      if (!refresh_token) {
+      if (refresh_token === undefined || refresh_token.length === 0) {
         return response.status(400).json({ message: 'missing refresh token' });
       }
       const refreshed_token = await auth
