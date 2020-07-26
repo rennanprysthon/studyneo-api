@@ -14,10 +14,7 @@ class AdminController {
   }
   async auth({ request, response, auth }) {
     const { email, password } = request.only(['email', 'password']);
-    const token = await auth
-      .authenticator('admin')
-      .withRefreshToken()
-      .attempt(email, password);
+    const token = await auth.authenticator('admin').attempt(email, password);
     return token;
   }
   async index() {

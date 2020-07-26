@@ -5,7 +5,7 @@ const Env = use('Env');
 class SessionController {
   async authenticate({ request, auth }) {
     const { email, password } = request.post();
-    const token = await auth.withRefreshToken().attempt(email, password);
+    const token = await auth.attempt(email, password);
 
     return token;
   }
