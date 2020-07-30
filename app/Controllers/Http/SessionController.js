@@ -6,8 +6,9 @@ class SessionController {
   async authenticate({ request, auth }) {
     const { email, password } = request.post();
     const token = await auth.attempt(email, password);
-
-    return token;
+    const user = await User.findBy('email', email);
+    user.password = undefined;
+    return { ...user, ...token };
   }
 
   async forgotPassword({ request, auth, response }) {
