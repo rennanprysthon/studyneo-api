@@ -1,5 +1,6 @@
 'use strict';
 const Subject = use('App/Models/Subject');
+const Database = use('Database');
 class SubjectController {
   async create({ request }) {
     const { title, matter_id } = request.only(['title', 'matter_id']);
@@ -8,8 +9,17 @@ class SubjectController {
     return subject;
   }
 
-  async index() {
-    const subjects = await Subject.all();
+  async index({ request }) {
+    const {
+      matter_id,
+      page = 1,
+      perPage = 10
+    } = request.get();
+
+    const subjects = await Database.from('subjects')
+      .where({ matter_id })
+      .paginate(page, perPage);
+
     return subjects;
   }
 
