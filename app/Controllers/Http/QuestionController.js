@@ -55,12 +55,11 @@ class QuestionController {
   }
   async listBySubject({ request }) {
     const { subject_id } = request.params;
-    const { page = 1 } = request.get();
+    const { page = 1, perPage = 10 } = request.get();
 
     const questions = await await Database.from('questions')
       .where({ subject_id })
-      .paginate(page, 10);
-    questions.total = Number(questions.total);
+      .paginate(page, perPage);
     return questions;
   }
   async update({ request, response }) {
