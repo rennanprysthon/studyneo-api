@@ -15,6 +15,9 @@ class Subject extends Model {
   questions() {
     return this.hasMany('App/Models/Question');
   }
+  overviews() {
+    return this.hasMany('App/Models/Overview');
+  }
 }
 
 module.exports = Subject;
