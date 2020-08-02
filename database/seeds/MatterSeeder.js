@@ -27,7 +27,15 @@ class MatterSeeder {
           area_id: 1,
         },
         {
+          title: 'Espanhol',
+          area_id: 1,
+        },
+        {
           title: 'Gramática',
+          area_id: 1,
+        },
+        {
+          title: 'Inglês',
           area_id: 1,
         },
         {

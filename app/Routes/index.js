@@ -8,6 +8,7 @@ require('./admin.route');
 require('./area.route');
 require('./matter.route');
 require('./question.route');
+require('./overview.route');
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route');

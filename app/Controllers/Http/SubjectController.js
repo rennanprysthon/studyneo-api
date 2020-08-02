@@ -10,11 +10,7 @@ class SubjectController {
   }
 
   async index({ request }) {
-    const {
-      matter_id,
-      page = 1,
-      perPage = 10
-    } = request.get();
+    const { matter_id, page = 1, perPage = 10 } = request.get();
 
     const subjects = await Database.from('subjects')
       .where({ matter_id })
