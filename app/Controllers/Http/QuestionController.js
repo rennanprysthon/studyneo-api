@@ -99,6 +99,8 @@ class QuestionController {
         updatedTexts.push(auxText);
       }
       question.texts = updatedTexts;
+    } else {
+      await question.texts().where('question_id', id).delete();
     }
 
     return question;
