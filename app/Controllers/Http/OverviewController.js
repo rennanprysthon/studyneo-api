@@ -17,6 +17,11 @@ class OverviewController {
     return overviews;
   }
 
+  async show({ request }) {
+    const { overview_id } = request.params;
+    const overview = await Overview.find(overview_id);
+    return overview;
+  }
   async listBySubject({ request }) {
     const { subject_id } = request.params;
     const { page = 1, perPage = 10 } = request.get();
