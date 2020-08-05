@@ -1,12 +1,12 @@
-const Mail = use('Mail');
-const Env = use('Env');
+
 
 const User = use('App/Models/User');
 const Redis = use('Redis');
 const bcrypt = use('bcrypt');
-const crypto = use('crypto');
+const Event = use('Event');
+
 class UserController {
-  async store({ request }) {
+  async store({ request, auth }) {
     const { name, email, password } = request.post();
     try {
       const user = await User.create({
@@ -16,33 +16,9 @@ class UserController {
         is_activated: true,
       });
 
-      //CONFIRM EMAIL (JUST REMOVE THE COMMENTS)
-      // const confirmEmailToken = await bcrypt.hashSync(email, 10);
-      // const key = crypto.randomBytes(3).toString('HEX').toUpperCase();
-      // await Redis.set(key, confirmEmailToken);
+      Event.fire('new::user', user)
 
-      // //const { token } = await auth.generate(user);
-      // try {
-      //   await Mail.send(
-      //     'emails.welcome',
-      //     {
-      //       name,
-      //       urlConfirmacao: `${Env.get('APP_URL')}/auth/confirm/${token}`,
-      //     },
-      //     (message) => {
-      //       message
-      //         .from(
-      //           'Studyneo <postmaster@sandboxa5218ba10a414287bb43e8064c4bb3d4.mailgun.org>'
-      //         )
-      //         .to(user.email)
-      //         .subject('Confirmar email');
-      //     }
-      //   );
-      // } catch (error) {
-      //   console.log(`Erro ao enviar o email: ${error}`);
-      // }
-
-      return user;
+      await user.delete();
     } catch (error) {
       console.log(error);
     }
@@ -94,7 +70,9 @@ class UserController {
   async confirm({ request, auth, response }) {
     const { email, code } = request.post();
     const token = await Redis.get(code);
-    const matchingEmails = await bcrypt.compareSync(email, token);
+    const confirmEmailToken = await bcrypt.hashSync(email, 10);
+    console.log(confirmEmailToken, token)
+    const matchingEmails = await bcrypt.compareSync(token, email);
     if (!matchingEmails) {
       return response.status(400).json({ message: 'Unable to verify Email' });
     }
