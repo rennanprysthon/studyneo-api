@@ -10,8 +10,8 @@ class TextController {
   }
 
   async index({ request }) {
-    const { page = 1 } = request.get();
-    const texts = await Database.from('texts').paginate(page, 10);
+    const { page = 1, perPage = 10 } = request.get();
+    const texts = await Database.from('texts').paginate(page, perPage);
     texts.total = Number(texts.total);
     return texts;
   }
@@ -25,12 +25,12 @@ class TextController {
     }
     return text;
   }
-  async listBySubject({ request }) {
-    const { subject_id } = request.params;
+  async listQuestion({ request }) {
+    const { question_id } = request.params;
     const { page = 1, perPage = 10 } = request.get();
 
     const texts = await await Database.from('texts')
-      .where({ subject_id })
+      .where({ question_id })
       .paginate(page, perPage);
     return texts;
   }
