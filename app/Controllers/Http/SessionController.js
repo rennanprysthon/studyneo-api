@@ -4,7 +4,9 @@ const Env = use('Env');
 
 class SessionController {
   async authenticate({ request, auth }) {
-    const { email, password } = request.post();
+    var { email, password } = request.post();
+    email = email.trim();
+
     const token = await auth.attempt(email, password);
     const user = await User.findBy({ email });
 
