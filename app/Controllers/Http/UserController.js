@@ -10,9 +10,9 @@ class UserController {
     const { name, email, password } = request.post();
     try {
       const user = await User.create({
-        name,
-        email,
-        password,
+        name: name.trim(),
+        email: email.trim().replace(/\s/g, ''),
+        password: password.trim().replace(/\s/g, ''),
         is_activated: true,
       });
 
