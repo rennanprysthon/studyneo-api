@@ -59,7 +59,7 @@ class UserController {
   }
 
   async showAll({ request }) {
-    const { page = 1, perPage = 50 } = request.get();
+    const { page = 1, perPage = 20 } = request.get();
 
     const users = await Database.select(
       'id',
