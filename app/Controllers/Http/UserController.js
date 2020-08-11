@@ -78,7 +78,7 @@ class UserController {
 
   async findUserByEmail({ request, response }) {
     const { email } = request.params;
-    const user = await User.findBy({ email });
+    const user = await User.findBy({ email: decodeURI(email) });
     if (!user) {
       return response.status(400).json({ message: 'User not found' });
     }
