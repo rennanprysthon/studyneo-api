@@ -5,14 +5,16 @@ const User = use('App/Models/User');
 const Redis = use('Redis');
 const bcrypt = use('bcrypt');
 const crypto = use('crypto');
+const Database = use('Database');
+
 class UserController {
   async store({ request }) {
     const { name, email, password } = request.post();
     try {
       const user = await User.create({
-        name,
-        email,
-        password,
+        name: name.trim(),
+        email: email.trim().replace(/\s/g, ''),
+        password: password.trim().replace(/\s/g, ''),
         is_activated: true,
       });
 
@@ -57,13 +59,31 @@ class UserController {
   }
 
   async showAll({ request }) {
-    const page = 1;
+    const { page = 1, perPage = 50 } = request.get();
 
-    const users = await User.query().paginate(page);
+    const users = await Database.select(
+      'id',
+      'name',
+      'email',
+      'is_activated',
+      'created_at',
+      'updated_at'
+    )
+      .from('users')
+      .paginate(page, perPage);
+    users.total = Number(users.total);
 
     return users;
   }
 
+  async findUserByEmail({ request, response }) {
+    const { email } = request.params;
+    const user = await User.findBy({ email });
+    if (!user) {
+      return response.status(400).json({ message: 'User not found' });
+    }
+    return user;
+  }
   async update({ request, auth, response }) {
     try {
       const { uid } = auth.jwtPayload;
