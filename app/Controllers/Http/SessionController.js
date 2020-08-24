@@ -80,7 +80,6 @@ class SessionController {
       });
 
       const gUser = ticket.getPayload();
-      console.log(gUser);
       const userDetails = {
         email: gUser.email,
         name: gUser.name,
