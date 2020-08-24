@@ -3,18 +3,18 @@
 class StoreUser {
   get rules() {
     return {
+      name: 'required',
       email: 'required|email|unique:users',
       password: 'required',
-      cpf: 'unique:users',
     };
   }
 
   get messages() {
     return {
+      'name.required': 'Vocês precisa informar o nome',
       'email.required': 'Você precisa informar o email de acesso.',
       'email.email': 'Você precisa informar um email válido.',
       'email.unique': 'O email informado já se encontra cadastrado.',
-      'cpf.unique': 'O CPF informado já se encontra cadastrado.',
       'password.required': 'Você precisa informar uma senha.',
     };
   }
