@@ -70,6 +70,7 @@ class UserController {
       'updated_at'
     )
       .from('users')
+      .orderBy('users.name', 'cresc')
       .paginate(page, perPage);
     users.total = Number(users.total);
 
