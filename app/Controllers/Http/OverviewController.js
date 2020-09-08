@@ -4,8 +4,8 @@ const Database = use('Database');
 
 class OverviewController {
   async create({ request }) {
-    const { content, subject_id } = request.post();
-    const overview = await Overview.create({ content, subject_id });
+    const { title, content, subject_id } = request.post();
+    const overview = await Overview.create({ title, content, subject_id });
 
     return overview;
   }
