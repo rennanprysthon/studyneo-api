@@ -10,3 +10,6 @@ package-lock.json
 yarn.lock
 # The development sqlite file
 database/*.sqlite
+
+app/Logging/exceptions
+app/Logging/logs
