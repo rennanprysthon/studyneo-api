@@ -1,11 +1,9 @@
-const Mail = use('Mail');
-const Env = use('Env');
-
 const User = use('App/Models/User');
 const Redis = use('Redis');
 const bcrypt = use('bcrypt');
-const crypto = use('crypto');
 const Database = use('Database');
+
+const logger = require('../../Logging/logger');
 
 class UserController {
   async store({ request }) {
@@ -50,17 +48,53 @@ class UserController {
     }
   }
 
+  async getUserLogs(email) {
+    try {
+      const data = await Database.table('user_logs').where('user_email', email);
+
+      return data;
+    } catch (error) {
+      console.log(error);
+      logger.error(error);
+    }
+  }
+
   async show({ request, response }) {
     const { id } = request.params;
     const user = await User.query().where('id', id).with('endereco').fetch();
 
-    if (!user) return response.status(404).send({ message: 'User not found' });
+    if (!user) {
+      return response.status(404).send({ message: 'User not found' });
+    }
+
+    const data = await this.getUserLogs(user.email);
+
+    if (!data) {
+      user.updates = data;
+    }
+
     return user;
   }
 
-  async showAll({ request }) {
-    const { page = 1, perPage = 20 } = request.get();
+  getQuery(params) {
+    const filter = params.split(';');
 
+    var query = '';
+    var valor = [];
+
+    filter.map((v, i) => {
+      valor = v.split('=');
+      if (i > 0) {
+        query += ' OR  ';
+      }
+      query += `${valor[0]} LIKE '%${valor[1]}%'`;
+    });
+
+    return query;
+  }
+
+  async showAll({ request }) {
+    const { page = 1, perPage = 20, filter } = request.get();
     const users = await Database.select(
       'id',
       'name',
@@ -70,8 +104,8 @@ class UserController {
       'updated_at'
     )
       .from('users')
+      .whereRaw(this.getQuery(filter))
       .paginate(page, perPage);
-    users.total = Number(users.total);
 
     return users;
   }

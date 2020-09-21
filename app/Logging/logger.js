@@ -9,7 +9,7 @@ const logger = createLogger({
   ],
   transports: [
     new transports.File({
-      filename: __dirname + `/logs/errors - ${new Date().toDateString()}.log`,
+      filename: __dirname + `/logs/logs - ${new Date().toDateString()}.log`,
       level: 'info',
       format: format.combine(format.timestamp(), format.json()),
     }),
