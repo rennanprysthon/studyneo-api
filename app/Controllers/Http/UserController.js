@@ -1,59 +1,19 @@
-const Mail = use('Mail');
-const Env = use('Env');
-
 const User = use('App/Models/User');
 const Redis = use('Redis');
 const bcrypt = use('bcrypt');
-const crypto = use('crypto');
 const Database = use('Database');
 
+const { CreateUserService, UpdateUserService } = use('App/Services/User');
 class UserController {
   async store({ request }) {
     const { name, email, password } = request.post();
-    try {
-      const user = await User.create({
-        name: name.trim(),
-        email: email.trim().replace(/\s/g, ''),
-        password: password.trim().replace(/\s/g, ''),
-        is_activated: true,
-      });
-
-      //CONFIRM EMAIL (JUST REMOVE THE COMMENTS)
-      // const confirmEmailToken = await bcrypt.hashSync(email, 10);
-      // const key = crypto.randomBytes(3).toString('HEX').toUpperCase();
-      // await Redis.set(key, confirmEmailToken);
-
-      // //const { token } = await auth.generate(user);
-      // try {
-      //   await Mail.send(
-      //     'emails.welcome',
-      //     {
-      //       name,
-      //       urlConfirmacao: `${Env.get('APP_URL')}/auth/confirm/${token}`,
-      //     },
-      //     (message) => {
-      //       message
-      //         .from(
-      //           'Studyneo <postmaster@sandboxa5218ba10a414287bb43e8064c4bb3d4.mailgun.org>'
-      //         )
-      //         .to(user.email)
-      //         .subject('Confirmar email');
-      //     }
-      //   );
-      // } catch (error) {
-      //   console.log(`Erro ao enviar o email: ${error}`);
-      // }
-
-      return user;
-    } catch (error) {
-      console.log(error);
-    }
+    const userService = new CreateUserService();
+    return userService.exec({ name, email, password });
   }
 
   async show({ request, response }) {
     const { id } = request.params;
-    const user = await User.query().where('id', id).with('endereco').fetch();
-
+    const user = await User.query().where('id', id).fetch();
     if (!user) return response.status(404).send({ message: 'User not found' });
     return user;
   }
@@ -67,7 +27,7 @@ class UserController {
       'email',
       'is_activated',
       'created_at',
-      'updated_at'
+      'updated_at',
     )
       .from('users')
       .paginate(page, perPage);
@@ -84,18 +44,12 @@ class UserController {
     }
     return user;
   }
-  async update({ request, auth, response }) {
-    try {
-      const { uid } = auth.jwtPayload;
-      const data = request.post();
-      const user = await User.find(uid);
-      user.merge(data);
-      await user.save();
 
-      return user;
-    } catch (err) {
-      return response.status(400).send({ message: 'operation not permited' });
-    }
+  async update({ request, auth, response }) {
+    const { uid } = auth.jwtPayload;
+    const data = request.post();
+    const userService = new UpdateUserService();
+    return userService.exec({ ...data, id: uid });
   }
 
   async remove({ auth, response }) {
