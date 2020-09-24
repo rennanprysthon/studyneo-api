@@ -18,7 +18,7 @@ const Route = use('Route');
 Route.get('/', () => {
   return {
     name: 'API para o aplicativo do Studyneo',
-    version: '0.1',
+    version: '1.0',
   };
 });
 
